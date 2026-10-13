@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server | 1.21.11</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Пиксельный шрифт для заголовка */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        /* ===== ШАПКА ===== */
+        header {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4CAF50;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 16px;
+            transition: 0.3s;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        /* ===== ГЛАВНЫЙ БАННЕР ===== */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 48px;
+            color: #4CAF50;
+            text-shadow: 4px 4px 0 #000, 8px 8px 20px rgba(76, 175, 80, 0.5);
+            margin-bottom: 25px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #ccc;
+            margin-bottom: 35px;
+        }
+
+        /* ===== IP БЛОК ===== */
+        .ip-box {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(76, 175, 80, 0.15);
+            border: 2px solid #4CAF50;
+            border-radius: 12px;
+            padding: 15px 25px;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .ip-box:hover {
+            background: rgba(76, 175, 80, 0.25);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(76, 175, 80, 0.6);
+        }
+
+        .ip-box .label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .ip-box .ip {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            letter-spacing: 1px;
+        }
+
+        .ip-box .copy-icon {
+            font-size: 22px;
+        }
+
+        .online-status {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 15px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4CAF50;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ===== СЕКЦИИ ===== */
+        section {
+            padding: 70px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 26px;
+            text-align: center;
+            color: #4CAF50;
+            text-shadow: 3px 3px 0 #000;
+            margin-bottom: 50px;
+        }
+
+        /* ===== КАРТОЧКИ ===== */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 15px;
+            padding: 30px 25px;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        }
+
+        .card .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #4CAF50;
+        }
+
+        .card p {
+            color: #bbb;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .btn {
+            display: inline-block;
+            background: #4CAF50;
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 0 #2e7d32;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: #66bb6a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #2e7d32;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #2e7d32;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            box-shadow: 0 4px 0 #3b45b5;
+        }
+
+        .btn-discord:hover {
+            background: #6d78ff;
+            box-shadow: 0 6px 0 #3b45b5;
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            background: rgba(0, 0, 0, 0.6);
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid #4CAF50;
+            margin-top: 50px;
+        }
+
+        footer p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        footer .social {
+            margin-bottom: 15px;
+        }
+
+        footer .social a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        footer .social a:hover {
+            color: #66bb6a;
+        }
+
+        /* ===== УВЕДОМЛЕНИЕ О КОПИРОВАНИИ ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #4CAF50;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: 0.4s;
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            nav a {
+                margin: 0 8px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 60px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .ip-box .ip {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            section {
+                padding: 50px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА -->
+    <header>
+        <div class="logo">⛏️ MYCRAFT</div>
+        <nav>
+            <a href="#home">Главная</a>
+            <a href="#features">Возможности</a>
+            <a href="#howto">Как играть</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+    </header>
+
+    <!-- ГЛАВНЫЙ БАННЕР -->
+    <div class="hero" id="home">
+        <h1>ДОБРО ПОЖАЛОВАТЬ</h1>
+        <p>Лучший Minecraft сервер версии 1.21.11</p>
+
+        <div class="ip-box" onclick="copyIP()">
+            <div>
+                <div class="label">IP сервера (нажми чтобы скопировать)</div>
+                <div class="ip" id="serverIP">play.myserver.ru</div>
+            </div>
+            <div class="copy-icon">📋</div>
+        </div>
+
+        <div class="online-status">
+            <span class="status-dot"></span>
+            <span>Онлайн: <b id="online">247</b> игроков</span>
+        </div>
+    </div>
+
+    <!-- ВОЗМОЖНОСТИ -->
+    <section id="features">
+        <h2 class="section-title">НАШИ ВОЗМОЖНОСТИ</h2>
+        <div class="cards">
+            <div class="card">
+                <div class="icon">⚔️</div>
+                <h3>Выживание</h3>
+                <p>Классическое выживание с друзьями, приватами и экономикой. Построй свой дом и защити его от врагов!</p>
+            </div>
+            <div class="card">
+                <div class="icon">🏰</div>
+                <h3>Кланы</h3>
+                <p>Создавай свой клан, воюй с другими, захватывай территории и становись лучшим на сервере.</p>
+            </div>
+            <div class="card">
+                <div class="icon">💎</div>
+                <h3>Донат-привилегии</h3>
+                <p>Поддержи сервер и получи уникальные возможности: кейсы, команды, скины и многое другое.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🎁</div>
+                <h3>Ивенты каждую неделю</h3>
+                <p>Участвуй в конкурсах и ивентах и получай ценные награды. Победители получают донат!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- КАК ИГРАТЬ -->
+    <section id="howto">
+        <h2 class="section-title">КАК НАЧАТЬ ИГРАТЬ</h2>
+        <div class="cards">
+            <div class="card">
+                <div class="icon">1️⃣</div>
+                <h3>Скачай Minecraft</h3>
+                <p>Установи лицензионную версию Minecraft Java Edition версии 1.21.11 или совместимую.</p>
+            </div>
+            <div class="card">
+                <div class="icon">2️⃣</div>
+                <h3>Запусти игру</h3>
+                <p>Открой лаунчер, выбери версию 1.21.11 и запусти игру.</p>
+            </div>
+            <div class="card">
+                <div class="icon">3️⃣</div>
+                <h3>Добавь сервер</h3>
+                <p>Нажми "Сетевая игра" → "Добавить сервер" и введи наш IP: <b>play.myserver.ru</b></p>
+            </div>
+            <div class="card">
+                <div class="icon">4️⃣</div>
+                <h3>Играй!</h3>
+                <p>Заходи на сервер, знакомься с игроками и начинай своё приключение!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section id="contacts">
+        <h2 class="section-title">ПРИСОЕДИНЯЙСЯ</h2>
+        <div class="cards">
+            <div class="card" style="text-align:center;">
+                <div class="icon">💬</div>
+                <h3>Discord сервер</h3>
+                <p>Общайся с игроками, узнавай новости и участвуй в розыгрышах.</p>
+                <a href="#" class="btn btn-discord">Присоединиться</a>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="icon">📢</div>
+                <h3>Telegram канал</h3>
+                <p>Следи за обновлениями и анонсами ивентов сервера.</p>
+                <a href="#" class="btn">Подписаться</a>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div class="icon">🛒</div>
+                <h3>Донат-магазин</h3>
+                <p>Поддержи сервер и получи уникальные привилегии и бонусы.</p>
+                <a href="#" class="btn">В магазин</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ФУТЕР -->
+    <footer>
+        <div class="social">
+            <a href="#">Discord</a> |
+            <a href="#">Telegram</a> |
+            <a href="#">VK</a> |
+            <a href="#">YouTube</a>
+        </div>
+        <p>© 2025 MyCraft Server. Все права защищены. Версия 1.21.11</p>
+    </footer>
+
+    <!-- УВЕДОМЛЕНИЕ -->
+    <div class="toast" id="toast">✅ IP скопирован в буфер обмена!</div>
+
+    <script>
+        // Копирование IP
+        function copyIP() {
+            const ip = document.getElementById('serverIP').textContent;
+            navigator.clipboard.writeText(ip).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        // Имитация изменения онлайна
+        const onlineEl = document.getElementById('online');
+        setInterval(() => {
+            let current = parseInt(onlineEl.textContent);
+            let change = Math.floor(Math.random() * 5) - 2; // -2 до +2
+            let newValue = Math.max(150, Math.min(350, current + change));
+            onlineEl.textContent = newValue;
+        }, 5000);
+
+        // Плавная прокрутка
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
